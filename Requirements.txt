@@ -1,0 +1,7 @@
+* smart system which has 3 inputs that get sorted by the first input [greenbox] and sorting it to the second input [bluebox] and having ability to get the default country by the user IP in the third input [orangebox].
+* the second input should has a dropdown so the user could select a different category
+* the third input should has a dropdown so the user could select a different country
+* the second and the third inputs should work with auto-complete
+* search engine that works with API's like Ebay, Amazon...
+* after clicking on the submit [search button] the results shows up below the main form
+* I should be able to set the order of the results

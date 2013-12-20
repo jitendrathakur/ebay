@@ -1,0 +1,16 @@
+body { margin: 40px; }
+.wrapper { margin: 0 auto; width: 960px; }
+.clear { clear: both; }
+.column { float: left; width: 30%; }
+.title { font-family:'arial'; font-weight: bold; color:#333; }
+.main {  border:1px solid #4eb800; }
+.sort { border:1px solid #006cb8; }
+.country { border:1px solid orange }
+
+
+
+
+input[type="submit"] { background:#044986; color:#fff; border: none; padding:20px; width: 500px; margin-top:20px; font-size:20px; font-weight: bold; }
+
+input[type="text"] {font-size:18px; padding: 16px; width: 200px;  box-shadow:0 2px 1px rgba(0, 0, 0, 0.075) inset; transition:border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s; }
+input[type="text"]:focus {  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6); outline: 0 none; }
