@@ -16,24 +16,31 @@
   <body>
 <div class="wrapper">
 
-  <div class="column">
-    <div class="title">Search For:</div>
-    <input type="text" class="main" placeholder="Start here" />
-  </div>
+  <form method="get" action="post.php" >
 
-  <div class="column">
-    <div class="title">Sort:</div>
-    <input type="text" class="sort" placeholder="Ebay"  />
-  </div>
+    <div class="column">
+      <div class="title">Search For:</div>
+      <input type="text" class="main" placeholder="Start here" name="keyword" />
+    </div>
 
-  <div class="column">
-    <div class="title">Country:</div>
-    <input type="text" class="country" placeholder="* Optional"  />
-  </div>
+    <div class="column">
+      <div class="title">Sort:</div>      
+      <select name="category">
+        <option value="ebay">Ebay</option>
+        <option value="amazon">Amazon</option>
+      </select>
+    </div>
 
-  <div class="clear"></div> 
+    <div class="column">
+      <div class="title">Country:</div>
+      <input type="text" class="country" placeholder="* Optional" name="country"  />
+    </div>
 
-  <input type="submit" value="Search" />
+    <div class="clear"></div> 
+
+    <input type="submit" value="Search" />
+
+  </form>
 
 </div>
 
