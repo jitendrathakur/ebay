@@ -23,51 +23,51 @@ if ($_GET['category'] == 'ebay') {
 }
 elseif($_GET['category'] == 'amazon')
 {
-echo "<h2>Amazon Result</h2>";
-$client = new AmazonECS('AKIAI47LUW5JKMASQSXQ', 'GXiY0kddNORa/1u+xcuwQg6PtEbD4CWzOQR8Vp/p', 'com', 'ASSOCIATE TAG');
-$client->setReturnType(AmazonECS::RETURN_TYPE_ARRAY);
-$response  = $client->category("All")->search($keywords);
+    echo "<h2>Amazon Result</h2>";
+    $client = new AmazonECS('AKIAIXCLOJMP4L2CCGEA', 'NfISxraD61uDaZKmm8JwNfidHClJElNKApVd+a/6', 'com', 'ASSOCIATE TAG');
+    $client->setReturnType(AmazonECS::RETURN_TYPE_ARRAY);
+    $response  = $client->category("All")->search($keywords);
 
-if (isset($response['Items']['Item']) ) {
+    if (isset($response['Items']['Item']) ) {
 
-    //loop through each item
-    foreach ($response['Items']['Item'] as $result) {
+        //loop through each item
+        foreach ($response['Items']['Item'] as $result) {
 
-        //check that there is a ASIN code - for some reason, some items are not
-        //correctly listed. Im sure there is a reason for it, need to check.
-        if (isset($result['ASIN'])) {
+            //check that there is a ASIN code - for some reason, some items are not
+            //correctly listed. Im sure there is a reason for it, need to check.
+            if (isset($result['ASIN'])) {
 
-            //store the ASIN code in case we need it
-            $asin = $result['ASIN'];
+                //store the ASIN code in case we need it
+                $asin = $result['ASIN'];
 
-            //check that there is a URL. If not - no need to bother showing
-            //this one as we only want linkable items
-            if (isset($result['DetailPageURL'])) {
+                //check that there is a URL. If not - no need to bother showing
+                //this one as we only want linkable items
+                if (isset($result['DetailPageURL'])) {
 
-                //set up a container for the details - this could be a DIV
-                echo "<p style='". IE_BACKGROUND . ";min-height: 60px; font-size: 90%;'>";
+                    //set up a container for the details - this could be a DIV
+                    echo "<p style='". IE_BACKGROUND . ";min-height: 60px; font-size: 90%;'>";
 
-                //create the URL link
-                echo "<a target='_Blank' href='" . $result['DetailPageURL'] ."'>";
+                    //create the URL link
+                    echo "<a target='_Blank' href='" . $result['DetailPageURL'] ."'>";
 
-                //if there is a small image - show it
-                if (isset($result['SmallImage']['URL'] )) {
-                    echo "<img class='shadow' style=' margin: 0px; margin-left: 10px; border: 1px solid black; max-height: 55px;' align='right' src='". $result['SmallImage']['URL'] ."'>";
+                    //if there is a small image - show it
+                    if (isset($result['SmallImage']['URL'] )) {
+                        echo "<img class='shadow' style=' margin: 0px; margin-left: 10px; border: 1px solid black; max-height: 55px;' align='right' src='". $result['SmallImage']['URL'] ."'>";
+                    }
+
+                    // if there is a title - show it
+                    if (isset($result['ItemAttributes']['Title'])) {
+                        echo $result['ItemAttributes']['Title'] . "<br/>";
+                    }
+
+                    //close the paragraph
+                    echo "</p>";
+
                 }
-
-                // if there is a title - show it
-                if (isset($result['ItemAttributes']['Title'])) {
-                    echo $result['ItemAttributes']['Title'] . "<br/>";
-                }
-
-                //close the paragraph
-                echo "</p>";
-
             }
         }
-    }
 
-} 
+    } 
 
 }
 
