@@ -28,7 +28,12 @@ elseif($_GET['category'] == 'amazon')
     $client->setReturnType(AmazonECS::RETURN_TYPE_ARRAY);
     $response  = $client->category("All")->search($keywords);
 
-    if (isset($response['Items']['Item']) ) {
+    if (isset($response['Items']['Item']) ) { ?>
+
+        <table class="table table-condensed table-hover table-bordered">
+
+
+        <?php
 
         //loop through each item
         foreach ($response['Items']['Item'] as $result) {
@@ -42,30 +47,45 @@ elseif($_GET['category'] == 'amazon')
 
                 //check that there is a URL. If not - no need to bother showing
                 //this one as we only want linkable items
-                if (isset($result['DetailPageURL'])) {
+                if (isset($result['DetailPageURL'])) { ?>
 
-                    //set up a container for the details - this could be a DIV
-                    echo "<p style='". IE_BACKGROUND . ";min-height: 60px; font-size: 90%;'>";
+                <tr>
+                  <td class="active">
+                       <?php
 
-                    //create the URL link
-                    echo "<a target='_Blank' href='" . $result['DetailPageURL'] ."'>";
+                        //set up a container for the details - this could be a DIV
+                        echo "<p style='min-height: 60px; font-size: 90%;'>";
 
-                    //if there is a small image - show it
-                    if (isset($result['SmallImage']['URL'] )) {
-                        echo "<img class='shadow' style=' margin: 0px; margin-left: 10px; border: 1px solid black; max-height: 55px;' align='right' src='". $result['SmallImage']['URL'] ."'>";
-                    }
+                        //create the URL link
+                        echo "<a target='_Blank' href='" . $result['DetailPageURL'] ."'>";
 
-                    // if there is a title - show it
-                    if (isset($result['ItemAttributes']['Title'])) {
-                        echo $result['ItemAttributes']['Title'] . "<br/>";
-                    }
+                        //if there is a small image - show it
+                        if (isset($result['SmallImage']['URL'] )) {
+                            echo "<img class='shadow' style=' margin: 0px; margin-left: 10px; border: 1px solid black; max-height: 55px;' align='right' src='". $result['SmallImage']['URL'] ."'>";
+                        }
 
-                    //close the paragraph
-                    echo "</p>";
+                        // if there is a title - show it
+                        if (isset($result['ItemAttributes']['Title'])) {
+                            echo $result['ItemAttributes']['Title'] . "<br/>";
+                        }
 
+                        //close the paragraph
+                        echo "</p>";
+
+                        ?>
+                  
+                  </td>
+                 
+                </tr>            
+
+                    <?php
                 }
             }
-        }
+        } ?>
+        </table>
+
+
+        <?php
 
     } 
 
