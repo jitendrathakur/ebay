@@ -31,10 +31,13 @@
 
 
   $url = json_decode(file_get_contents("http://api.ipinfodb.com/v3/ip-city/?key=<your_api_key>&ip=".$_SERVER['REMOTE_ADDR']."&format=json"));
-  $countryCode= !empty($url->countryCode) ? $url->countryCode : 'com';
+  $countryCode = !empty($url->countryCode) ? $url->countryCode : 'com';
+
 
   $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
   $category = isset($_GET['category']) ? $_GET['category'] : '';
+
+  $country = isset($_GET['country']) ? $_GET['country'] : $countryCode;
 
 
   if (isset($_GET['keyword'])) :
@@ -45,7 +48,7 @@
 
     if ($_GET['category'] == 'ebay') {   
       //find items advanced      
-      $url = 'http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.12.0&SECURITY-APPNAME=self56e11-173d-4020-8209-31afe61b5b6&RESPONSE-DATA-FORMAT=XML&REST-PAYLOAD&keywords='.$keywords.'%203g&paginationInput.entriesPerPage=10';
+      $url = 'http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.12.0&SECURITY-APPNAME=self56e11-173d-4020-8209-31afe61b5b6&RESPONSE-DATA-FORMAT=XML&REST-PAYLOAD&country=IN&keywords='.$keywords.'%203g&paginationInput.entriesPerPage=10';
       $resp = curl($url);
 
       $xml   = simplexml_load_string($resp);
