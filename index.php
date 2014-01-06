@@ -17,6 +17,7 @@
   <script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
   <script src="js/bootstrap.js" type="text/javascript"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="js/custom.js"></script>
 
 
 
@@ -154,18 +155,7 @@ this.element.show();
 }
 });
 })( jQuery );
-$(function() {
-$( "#combobox" ).combobox();
-$( "#toggle" ).click(function() {
-$( "#combobox" ).toggle();
-});
 
-$( "#country" ).combobox();
-$( "#toggle" ).click(function() {
-$( "#country" ).toggle();
-});
-
-});
 </script>
 
 </head>
@@ -201,7 +191,55 @@ $( "#country" ).toggle();
         </div>        
       </div>
 
-      <div class="column">
+      <?php $style = ($open_country == 'ebay') ? 'display:block' : "display:none"; ?>
+      <?php if ($open_country == 'start') {
+        $style = 'display:block';
+        } ?>
+      <div class="ebay-country" style="<?php echo $style; ?>">
+        <div class="title">Country:</div>
+        <div class="ui-widget">  
+          <?php        
+            $option = array(
+              'EBAY-AT' => 'Austria', 
+              'EBAY-AU' => 'Australia', 
+              'EBAY-CH' => 'Switzerland',
+              'EBAY-DE' => 'Germany', 
+              'EBAY-ENCA' => 'Canada (English)', 
+              'EBAY-ES' => 'Spain', 
+              'EBAY-FR' => 'France', 
+              'EBAY-FRBE' => 'Belgium (French)',
+              'EBAY-FRCA' => 'Canada (French)', 
+              'EBAY-GB' => 'Great Britain', 
+              'EBAY-HK' => 'Honk Kong',        
+              'EBAY-IE' => 'Ireland', 
+              'EBAY-IN' => 'India', 
+              'EBAY-IT' => 'Italy', 
+              'EBAY-MOTOR' => 'Motors', 
+              'EBAY-MY' => 'Malaysia',
+              'EBAY-NL' => 'Netherlands', 
+              'EBAY-NLBE' => 'Belgium (Dutch)', 
+              'EBAY-PH' => 'Philippines',
+              'EBAY-PL' => 'Poland', 
+              'EBAY-SG' => 'Singapore', 
+              'EBAY-US' => 'United States'
+              
+            );            
+          ?>       
+          <select id="ebay_country" name="ebay_country">
+            <option value="">Select one...</option>
+            <?php foreach($option as $key => $value) : 
+              $selected = ($country == $key) ? "selected" : "";
+
+            ?>
+            <option value="<?php echo $key; ?>"  <?php echo $selected; ?>  ><?php echo $value; ?></option>                
+            <?php endforeach; ?>    
+          </select>
+        </div>
+      </div>
+
+      <?php $style = ($open_country == 'amazon') ? 'display:block' : "display:none"; ?>
+
+      <div class="amazon-country" style="<?php echo $style; ?>">
         <div class="title">Country:</div>
         <div class="ui-widget">  
           <?php
@@ -209,7 +247,7 @@ $( "#country" ).toggle();
             $option = array('de' => 'Denmark', 'com' => 'United State', 'co.uk' => 'Great Britain',
              'ca' => 'Canada', 'fr' => 'Franse', 'co.jp' => 'Japan', 'cn' => 'China', 'it' => 'Italy');            
           ?>       
-          <select id="country" name="country">
+          <select id="amazon_country" name="amazon_country">
             <option value="">Select one...</option>
             <?php foreach($option as $key => $value) : 
               $selected = ($country == $key) ? "selected" : "";
