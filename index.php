@@ -14,11 +14,12 @@
   <link href="css/bootstrap.css" rel="stylesheet">
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
   
-  <script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
+  <script src="js/jquery-1.8.3.min.js" type="text/javascript"></script>
   <script src="js/bootstrap.js" type="text/javascript"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script type="text/javascript" language="javascript" src="js/jquery.dataTables.js"></script>
   <script src="js/custom.js"></script>
-
+ 
 
 
   <style>
@@ -158,6 +159,38 @@ this.element.show();
 
 </script>
 
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $('#example').dataTable( {
+        //"bPaginate": false,    
+        "bLengthChange": false,
+        "bFilter": false,    
+        "bInfo": false,
+        "bAutoWidth": false,
+        "iDisplayLength" : 5,
+        "sEmptyTable"  :  "No messages found",
+        "sPaginationType": "full_numbers",
+        "sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",
+        //"sPaginationType": "bootstrap"
+      });
+
+      $('#ebay_table').dataTable( {
+        //"bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,    
+        "bInfo": false,
+        "bAutoWidth": false,
+        "iDisplayLength" : 5,
+        "sEmptyTable"  :  "No messages found",
+        "sPaginationType": "full_numbers",
+        "sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",
+        //"sPaginationType": "bootstrap"
+      });
+
+
+    });
+  </script>
+
 </head>
 
 <body>
@@ -198,36 +231,10 @@ this.element.show();
       <div class="ebay-country" style="<?php echo $style; ?>">
         <div class="title">Country:</div>
         <div class="ui-widget">  
-          <?php        
-            $option = array(
-              'EBAY-AT' => 'Austria', 
-              'EBAY-AU' => 'Australia', 
-              'EBAY-CH' => 'Switzerland',
-              'EBAY-DE' => 'Germany', 
-              'EBAY-ENCA' => 'Canada (English)', 
-              'EBAY-ES' => 'Spain', 
-              'EBAY-FR' => 'France', 
-              'EBAY-FRBE' => 'Belgium (French)',
-              'EBAY-FRCA' => 'Canada (French)', 
-              'EBAY-GB' => 'Great Britain', 
-              'EBAY-HK' => 'Honk Kong',        
-              'EBAY-IE' => 'Ireland', 
-              'EBAY-IN' => 'India', 
-              'EBAY-IT' => 'Italy', 
-              'EBAY-MOTOR' => 'Motors', 
-              'EBAY-MY' => 'Malaysia',
-              'EBAY-NL' => 'Netherlands', 
-              'EBAY-NLBE' => 'Belgium (Dutch)', 
-              'EBAY-PH' => 'Philippines',
-              'EBAY-PL' => 'Poland', 
-              'EBAY-SG' => 'Singapore', 
-              'EBAY-US' => 'United States'
-              
-            );            
-          ?>       
+             
           <select id="ebay_country" name="ebay_country">
             <option value="">Select one...</option>
-            <?php foreach($option as $key => $value) : 
+            <?php foreach($ebay_country as $key => $value) : 
               $selected = ($country == $key) ? "selected" : "";
 
             ?>
@@ -242,14 +249,10 @@ this.element.show();
       <div class="amazon-country" style="<?php echo $style; ?>">
         <div class="title">Country:</div>
         <div class="ui-widget">  
-          <?php
-          //echo $countryCode;
-            $option = array('de' => 'Denmark', 'com' => 'United State', 'co.uk' => 'Great Britain',
-             'ca' => 'Canada', 'fr' => 'Franse', 'co.jp' => 'Japan', 'cn' => 'China', 'it' => 'Italy');            
-          ?>       
+               
           <select id="amazon_country" name="amazon_country">
             <option value="">Select one...</option>
-            <?php foreach($option as $key => $value) : 
+            <?php foreach($amazon_country as $key => $value) : 
               $selected = ($country == $key) ? "selected" : "";
 
             ?>
@@ -275,7 +278,16 @@ this.element.show();
     if ($result['service'] == 'ebay') {
       ?> <h1>Ebay result</h1> <?php        
          
-        echo '<table class="table table-bordered table-striped table-hover">';
+        echo '<table class="table table-bordered table-striped table-hover" id="ebay_table">';
+        ?>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Product Name</th>         
+            </tr>
+          </thead>
+          <tbody>
+        <?php
         for ($i=0;$i<=8;$i++) {
        
           echo "<tr>";
@@ -283,7 +295,7 @@ this.element.show();
           echo "<td><a target='_Blank' href='" . $result['searchResult']['item'][$i]['viewItemURL'] ."'>". $result['searchResult']['item'][$i]['title'] . "</a></td></tr>";
           echo "</tr>";
         }
-        echo "</table>";
+        echo "</tbody></table>";
 
     } elseif($result['service'] == 'amazon') {
 
@@ -292,7 +304,16 @@ this.element.show();
         if (isset($result['Items']['Item']) ) {
        
            //loop through each item
-          echo '<table class="table table-bordered table-striped table-hover"><tr>';
+          echo '<table class="table table-bordered table-striped table-hover" id="example">';
+          ?>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Product Name</th>         
+            </tr>
+          </thead>
+          <tbody>
+          <?php
           foreach ($result['Items']['Item'] as $row) {
             //check that there is a ASIN code - for some reason, some items are not
             //correctly listed. Im sure there is a reason for it, need to check.
@@ -306,7 +327,7 @@ this.element.show();
                 //set up a container for the details - this could be a DIV   
                 //if there is a small image - show it
                 if (isset($row['SmallImage']['URL'] )) {
-                    echo "<td><img class='shadow' style='width:80px; height:70px; margin: 0px; margin-left: 10px; border: 1px solid black;' align='right' src='". $row['SmallImage']['URL'] ."'></td>";
+                    echo "<tr><td><img class='shadow' style='width:80px; height:70px; margin: 0px; margin-left: 10px; border: 1px solid black;' align='right' src='". $row['SmallImage']['URL'] ."'></td>";
                 }
                 // if there is a title - show it
                 if (isset($row['ItemAttributes']['Title'])) {
@@ -316,7 +337,7 @@ this.element.show();
               }
             }
           }
-          echo "</table>";
+          echo "</tbody></table>";
         } 
     }
 

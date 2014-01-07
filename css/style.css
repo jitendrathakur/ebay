@@ -18,3 +18,29 @@ input[type="text"]:focus {  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 
 .show {display:block;}
 
 .hide {display:none;}
+
+.dataTables_paginate a.paginate_button_disabled  {
+	border-left-width: 1px;
+	border-bottom-left-radius: 4px;
+	border-top-left-radius: 4px;
+	color: #999;
+	cursor: not-allowed;
+	background-color: #fff;
+}
+
+.dataTables_paginate a {
+    
+
+	background-color: #f5f5f5;
+	float: left;
+	padding: 6px 12px;
+	line-height: 1.428571429;
+	text-decoration: none;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-left-width: 0;
+
+}
+
+.container {margin-bottom:50px;}
+

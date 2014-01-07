@@ -28,26 +28,63 @@
       return $array;
   }
 
+  $ebay_country = array(
+    'AT' => 'Austria', 
+    'AU' => 'Australia', 
+    'CH' => 'Switzerland',
+    'DE' => 'Germany', 
+    'ENCA' => 'Canada (English)', 
+    'ES' => 'Spain', 
+    'FR' => 'France', 
+    'FRBE' => 'Belgium (French)',
+    'FRCA' => 'Canada (French)', 
+    'GB' => 'Great Britain', 
+    'HK' => 'Honk Kong',        
+    'IE' => 'Ireland', 
+    'IN' => 'India', 
+    'IT' => 'Italy', 
+    'MOTOR' => 'Motors', 
+    'MY' => 'Malaysia',
+    'NL' => 'Netherlands', 
+    'NLBE' => 'Belgium (Dutch)', 
+    'PH' => 'Philippines',
+    'PL' => 'Poland', 
+    'SG' => 'Singapore', 
+    'US' => 'United States'
+    
+  );
 
+  $amazon_country = array('de' => 'Denmark', 'com' => 'United State', 'co.uk' => 'Great Britain',
+             'ca' => 'Canada', 'fr' => 'Franse', 'co.jp' => 'Japan', 'cn' => 'China', 'it' => 'Italy');
+  
+  $ip = $_SERVER['REMOTE_ADDR'];
+  $result = curl("freegeoip.net/json/".$ip);
 
-  $url = json_decode(file_get_contents("http://api.ipinfodb.com/v3/ip-city/?key=<your_api_key>&ip=".$_SERVER['REMOTE_ADDR']."&format=json"));
-  $countryCode = !empty($url->countryCode) ? $url->countryCode : 'com';
+  $result = json_decode($result, 1);
 
+  $ipCountryCode = $result['country_code'];
 
   $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
   $category = isset($_GET['category']) ? $_GET['category'] : '';
 
-  if (!empty($_GET['ebay_country'])) {
+  if (!empty($_GET['ebay_country']) && ($_GET['category'] == 'ebay')) {
     $open_country = 'ebay';
     $country = $_GET['ebay_country'];
-  } else if (!empty($_GET['amazon_country'])) {
+  } else if (!empty($_GET['amazon_country']) && ($_GET['category'] == 'amazon')) {
     $open_country = 'amazon';
     $country = $_GET['amazon_country'];
   } else {
     $open_country = 'start';
-    $country = $countryCode;
+    foreach($ebay_country as $code => $name) {
+      if ($code == $ipCountryCode) {
+        $country = $code;
+        break;
+      } else {
+        $country = 'US';
+      }
+    }   
+     
   }
-
 
   if (isset($_GET['keyword'])) :
 
@@ -59,7 +96,7 @@
 
  
       //find items advanced      
-      $url = 'http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.12.0&SECURITY-APPNAME=self56e11-173d-4020-8209-31afe61b5b6&RESPONSE-DATA-FORMAT=XML&REST-PAYLOAD&global-id='.$country.'&keywords='.$keywords.'%203g&paginationInput.entriesPerPage=10';
+      $url = 'http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.12.0&SECURITY-APPNAME=self56e11-173d-4020-8209-31afe61b5b6&RESPONSE-DATA-FORMAT=XML&REST-PAYLOAD&global-id=EBAY-'.$country.'&keywords='.$keywords.'%203g&paginationInput.entriesPerPage=20';
       $resp = curl($url);
 
       $xml   = simplexml_load_string($resp);
@@ -82,7 +119,6 @@
       
       $result = $response;
       $result['service'] = 'amazon';
-    
 
     }
 
