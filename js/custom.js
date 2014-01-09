@@ -20,6 +20,13 @@ $(function() {
 		$( "#amazon_country" ).toggle();
 	});
 
+	$("input[type='submit']").click(function() {
+		if ($(".custom-combobox-input").val() == '') {
+			alert("please select category");
+			return false;
+		}
+	});
+
 
 
 });

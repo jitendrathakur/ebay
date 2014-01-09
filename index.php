@@ -167,11 +167,10 @@ this.element.show();
         "bFilter": false,    
         "bInfo": false,
         "bAutoWidth": false,
-        "iDisplayLength" : 5,
+        "iDisplayLength" : 4,
         "sEmptyTable"  :  "No messages found",
         "sPaginationType": "full_numbers",
-        "sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",
-        //"sPaginationType": "bootstrap"
+        "sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",       
       });
 
       $('#ebay_table').dataTable( {
@@ -180,7 +179,7 @@ this.element.show();
         "bFilter": false,    
         "bInfo": false,
         "bAutoWidth": false,
-        "iDisplayLength" : 5,
+        "iDisplayLength" : 4,
         "sEmptyTable"  :  "No messages found",
         "sPaginationType": "full_numbers",
         "sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",
@@ -203,7 +202,7 @@ this.element.show();
 
       <div class="column">
         <div class="title">Search For:</div>
-        <input type="text" class="main" placeholder="Start here" name="keyword" value="<?php echo $keyword; ?>" />
+        <input type="text" class="main" placeholder="Start here" name="keyword" value="<?php echo urldecode($keyword); ?>" />
       </div>
 
       <div class="column">
@@ -236,6 +235,9 @@ this.element.show();
             <option value="">Select one...</option>
             <?php foreach($ebay_country as $key => $value) : 
               $selected = ($country == $key) ? "selected" : "";
+              if ($key == 'US') {
+                $selected = 'selected';
+              }
 
             ?>
             <option value="<?php echo $key; ?>"  <?php echo $selected; ?>  ><?php echo $value; ?></option>                
@@ -254,6 +256,9 @@ this.element.show();
             <option value="">Select one...</option>
             <?php foreach($amazon_country as $key => $value) : 
               $selected = ($country == $key) ? "selected" : "";
+              if ($key == 'com') {
+                $selected = 'selected';
+              }
 
             ?>
             <option value="<?php echo $key; ?>"  <?php echo $selected; ?>  ><?php echo $value; ?></option>                
@@ -287,13 +292,19 @@ this.element.show();
             </tr>
           </thead>
           <tbody>
-        <?php
-        for ($i=0;$i<=8;$i++) {
-       
-          echo "<tr>";
-          echo "<td><img class='shadow' style=' width:80px; height:70px; margin: 0px; margin-left: 10px; border: 1px solid black;' align='right' src='". $result['searchResult']['item'][$i]['galleryURL'] ."'></td>";
-          echo "<td><a target='_Blank' href='" . $result['searchResult']['item'][$i]['viewItemURL'] ."'>". $result['searchResult']['item'][$i]['title'] . "</a></td></tr>";
-          echo "</tr>";
+        <?php      
+        if (isset($result['searchResult']['item'])) {
+          for ($i=0;$i<=20;$i++) {
+
+            if (!isset( $result['searchResult']['item'][$i]['galleryURL'])) {
+              break;
+            }
+         
+            echo "<tr>";
+            echo "<td><img class='shadow' style=' width:80px; height:70px; margin: 0px; margin-left: 10px; border: 1px solid black;' align='right' src='". $result['searchResult']['item'][$i]['galleryURL'] ."'></td>";
+            echo "<td><a target='_Blank' href='" . $result['searchResult']['item'][$i]['viewItemURL'] ."'>". $result['searchResult']['item'][$i]['title'] . "</a></td></tr>";
+            echo "</tr>";
+          }
         }
         echo "</tbody></table>";
 
@@ -317,6 +328,7 @@ this.element.show();
           foreach ($result['Items']['Item'] as $row) {
             //check that there is a ASIN code - for some reason, some items are not
             //correctly listed. Im sure there is a reason for it, need to check.
+            
             if (isset($row['ASIN'])) {
 
                 //store the ASIN code in case we need it
@@ -326,16 +338,20 @@ this.element.show();
               if (isset($row['DetailPageURL'])) {             
                 //set up a container for the details - this could be a DIV   
                 //if there is a small image - show it
+                echo "<tr><td>";
                 if (isset($row['SmallImage']['URL'] )) {
-                    echo "<tr><td><img class='shadow' style='width:80px; height:70px; margin: 0px; margin-left: 10px; border: 1px solid black;' align='right' src='". $row['SmallImage']['URL'] ."'></td>";
+                    echo "<img class='shadow' style='width:80px; height:70px; margin: 0px; margin-left: 10px; border: 1px solid black;' align='right' src='". $row['SmallImage']['URL'] ."'>";
                 }
+                echo "</td><td>";
                 // if there is a title - show it
                 if (isset($row['ItemAttributes']['Title'])) {
-                    echo "<td><a target='_Blank' href='" . $row['DetailPageURL'] ."'>". $row['ItemAttributes']['Title'] . "</a></td></tr>";
-                }            
+                    echo "<a target='_Blank' href='" . $row['DetailPageURL'] ."'>". $row['ItemAttributes']['Title'] . "</a>";
+                }        
+                echo "</td></tr>";    
 
               }
             }
+            
           }
           echo "</tbody></table>";
         } 

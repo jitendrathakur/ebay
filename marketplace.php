@@ -29,6 +29,7 @@
   }
 
   $ebay_country = array(
+    'US' => 'United States',
     'AT' => 'Austria', 
     'AU' => 'Australia', 
     'CH' => 'Switzerland',
@@ -49,12 +50,10 @@
     'NLBE' => 'Belgium (Dutch)', 
     'PH' => 'Philippines',
     'PL' => 'Poland', 
-    'SG' => 'Singapore', 
-    'US' => 'United States'
-    
+    'SG' => 'Singapore'    
   );
 
-  $amazon_country = array('de' => 'Denmark', 'com' => 'United State', 'co.uk' => 'Great Britain',
+  $amazon_country = array('com' => 'United States', 'de' => 'Denmark', 'co.uk' => 'Great Britain',
              'ca' => 'Canada', 'fr' => 'Franse', 'co.jp' => 'Japan', 'cn' => 'China', 'it' => 'Italy');
   
   $ip = $_SERVER['REMOTE_ADDR'];
@@ -64,7 +63,7 @@
 
   $ipCountryCode = $result['country_code'];
 
-  $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+  $keyword = isset($_GET['keyword']) ? urlencode($_GET['keyword']) : '';
   $category = isset($_GET['category']) ? $_GET['category'] : '';
 
   if (!empty($_GET['ebay_country']) && ($_GET['category'] == 'ebay')) {
@@ -88,15 +87,13 @@
 
   if (isset($_GET['keyword'])) :
 
-  //Ebay
-
-    $keywords = $_GET['keyword'];    // make sure this is a valid keyword or keywords
+  //Ebay   
 
     if ($_GET['category'] == 'ebay') {
 
  
       //find items advanced      
-      $url = 'http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.12.0&SECURITY-APPNAME=self56e11-173d-4020-8209-31afe61b5b6&RESPONSE-DATA-FORMAT=XML&REST-PAYLOAD&global-id=EBAY-'.$country.'&keywords='.$keywords.'%203g&paginationInput.entriesPerPage=20';
+      $url = 'http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.12.0&SECURITY-APPNAME=self56e11-173d-4020-8209-31afe61b5b6&RESPONSE-DATA-FORMAT=XML&REST-PAYLOAD&global-id=EBAY-'.$country.'&keywords='.$keyword.'%203g&paginationInput.entriesPerPage=20';
       $resp = curl($url);
 
       $xml   = simplexml_load_string($resp);
@@ -114,7 +111,7 @@
       $client->setReturnType(AmazonECS::RETURN_TYPE_ARRAY);
       $response = $client->country($country);
       $response = $client->responseGroup('Small,Images');
-      $response  = $client->category("All")->search($keywords);
+      $response  = $client->category("All")->search($keyword);
 
       
       $result = $response;
